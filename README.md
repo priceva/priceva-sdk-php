@@ -1,2 +1,3 @@
-# SDK_PHP
+# Priceva SDK
+
 SDK for Priceva API (PHP)

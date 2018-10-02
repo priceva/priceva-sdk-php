@@ -1,0 +1,23 @@
+{
+    "name": "priceva/priceva-php",
+    "description": "later",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Stanislav Belichenko",
+            "email": "stanislav@priceva.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.4",
+        "ext-json": "*",
+        "ext-curl": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Priceva\\": "src/"
+        }
+    }
+}
