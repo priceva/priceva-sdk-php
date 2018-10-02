@@ -1,8 +1,17 @@
 {
-    "name": "priceva/priceva-php",
+    "name": "priceva/priceva-sdk-php",
     "description": "later",
     "type": "library",
     "license": "MIT",
+    "keywords": [
+        "priceva",
+        "php"
+    ],
+    "support": {
+        "email": "support@priceva.com",
+        "issues": "https://github.com/priceva/priceva-sdk-php/issues"
+    },
+    "homepage": "https://github.com/priceva/priceva-sdk-php",
     "authors": [
         {
             "name": "Stanislav Belichenko",
