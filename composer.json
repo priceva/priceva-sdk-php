@@ -5,7 +5,8 @@
     "license": "MIT",
     "keywords": [
         "priceva",
-        "php"
+        "php",
+        "api"
     ],
     "support": {
         "email": "support@priceva.com",
