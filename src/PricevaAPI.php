@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: Stas
+ * S.Belichenko, email: stanislav@priceva.com
  * Date: 01.10.2018
  * Time: 16:52
  */
