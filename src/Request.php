@@ -67,7 +67,7 @@ class Request
         $json_last_error = json_last_error();
 
         if ($json_last_error) {
-            throw new PricevaException('', 400);
+            throw new PricevaException('', 500);
         } else {
             return new Result($response);
         }

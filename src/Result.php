@@ -147,7 +147,7 @@ class Result
             $json_last_error = json_last_error();
 
             if( $json_last_error ){
-                throw new PricevaException(null, 500);
+                throw new PricevaException(null, 418);
             }else{
                 return $result;
             }
@@ -167,7 +167,7 @@ class Result
             $json_last_error = json_last_error();
 
             if( $json_last_error ){
-                throw new PricevaException('');
+                throw new PricevaException(null, 418);
             }else{
                 return $result;
             }

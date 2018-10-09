@@ -21,7 +21,7 @@ class PricevaException extends Exception
     private $errors = [
         '400' => 'Your request caused an error. You can not get the result.',
         '401' => 'Authorization failed.',
-        '418' => 'The response from the server cannot be converted to an array json or other entity.',
+        '418' => 'The response from the server cannot be converted to an array, json or other entity.',
         '500' => 'Internal Server Error',
     ];
 
