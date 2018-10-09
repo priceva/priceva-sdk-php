@@ -109,7 +109,7 @@ class Result
     }
 
     /**
-     * @return bool|\stdClass
+     * @return \stdClass
      * @throws PricevaException
      */
     public function get_raw()
@@ -122,7 +122,20 @@ class Result
     }
 
     /**
-     * @return bool|\stdClass
+     * @return mixed
+     * @throws PricevaException
+     */
+    public function get_result()
+    {
+        if( $this->error ){
+            throw new PricevaException(null, 400);
+        }else{
+            return $this->result;
+        }
+    }
+
+    /**
+     * @return \stdClass
      * @throws PricevaException
      */
     public function get_std_class()
@@ -130,7 +143,7 @@ class Result
         if( $this->error ){
             throw new PricevaException(null, 400);
         }else{
-            $result          = json_decode($this->curl_response->result, false);
+            $result          = json_decode($this->result, false);
             $json_last_error = json_last_error();
 
             if( $json_last_error ){
@@ -142,7 +155,7 @@ class Result
     }
 
     /**
-     * @return bool|array
+     * @return array
      * @throws PricevaException
      */
     public function get_assoc()
@@ -150,7 +163,7 @@ class Result
         if( $this->error ){
             throw new PricevaException(null, 400);
         }else{
-            $result          = json_decode($this->curl_response->result, true);
+            $result          = json_decode($this->result, true);
             $json_last_error = json_last_error();
 
             if( $json_last_error ){
