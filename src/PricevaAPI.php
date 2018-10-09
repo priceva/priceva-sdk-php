@@ -17,6 +17,7 @@ namespace Priceva;
 class PricevaAPI
 {
     const ACTION_MAIN_PING = 'main/ping';
+    const ACTION_MAIN_DEMO = 'main/demo';
 
     /**
      * @var string $api_key
@@ -43,6 +44,7 @@ class PricevaAPI
 
     /**
      * @return Result;
+     * @throws PricevaException
      */
     public function main_ping()
     {
@@ -50,6 +52,21 @@ class PricevaAPI
             'api_key'     => $this->api_key,
             'api_version' => $this->api_version,
             'action'      => self::ACTION_MAIN_PING,
+        ]);
+
+        return $request->start();
+    }
+
+    /**
+     * @return Result;
+     * @throws PricevaException
+     */
+    public function main_demo()
+    {
+        $request = new Request([
+            'api_key'     => $this->api_key,
+            'api_version' => $this->api_version,
+            'action'      => self::ACTION_MAIN_DEMO,
         ]);
 
         return $request->start();

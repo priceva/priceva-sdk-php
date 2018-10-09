@@ -42,7 +42,8 @@ use Priceva\PricevaAPI;
 
 
 try{
-    require_once __DIR__ . "/../vendor/autoload.php"; // or include our files directly, if you dont want to use composer
+    // or include our files directly, if you don't want to use Composer
+    require_once __DIR__ . "/../vendor/autoload.php";
 
     $api = new PricevaAPI('your_api_key');
 
@@ -52,3 +53,11 @@ try{
     // error handler
 }
 ````
+## API actions
+
+* main/ping
+* main/demo 
+
+## Additional information
+
+Read more about our API [here](https://priceva.docs.apiary.io/#introduction).

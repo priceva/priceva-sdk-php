@@ -45,6 +45,7 @@ class Request
 
     /**
      * @return Result
+     * @throws PricevaException
      */
     public function start( )
     {
