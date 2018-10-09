@@ -19,6 +19,8 @@ class PricevaAPI
     const ACTION_MAIN_PING = 'main/ping';
     const ACTION_MAIN_DEMO = 'main/demo';
 
+    const ACTION_PRODUCT_LIST = 'product/list';
+
     /**
      * @var string $api_key
      * @var int    $api_version
@@ -67,6 +69,21 @@ class PricevaAPI
             'api_key'     => $this->api_key,
             'api_version' => $this->api_version,
             'action'      => self::ACTION_MAIN_DEMO,
+        ]);
+
+        return $request->start();
+    }
+
+    /**
+     * @return Result;
+     * @throws PricevaException
+     */
+    public function product_list()
+    {
+        $request = new Request([
+            'api_key'     => $this->api_key,
+            'api_version' => $this->api_version,
+            'action'      => self::ACTION_PRODUCT_LIST,
         ]);
 
         return $request->start();
