@@ -61,9 +61,14 @@ class Request
         ]);
 
         $response = json_decode(curl_exec($ch));
-
         curl_close($ch);
 
-        return new Result($response);
+        $json_last_error = json_last_error();
+
+        if ($json_last_error) {
+            throw new PricevaException('', 400);
+        } else {
+            return new Result($response);
+        }
     }
 }
