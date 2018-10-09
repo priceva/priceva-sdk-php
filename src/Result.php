@@ -130,7 +130,14 @@ class Result
         if( $this->error ){
             throw new PricevaException(null, 400);
         }else{
-            return json_decode($this->curl_response->result);
+            $result          = json_decode($this->curl_response->result, false);
+            $json_last_error = json_last_error();
+
+            if( $json_last_error ){
+                throw new PricevaException(null, 500);
+            }else{
+                return $result;
+            }
         }
     }
 
@@ -143,7 +150,14 @@ class Result
         if( $this->error ){
             throw new PricevaException(null, 400);
         }else{
-            return json_decode($this->curl_response->result, true);
+            $result          = json_decode($this->curl_response->result, true);
+            $json_last_error = json_last_error();
+
+            if( $json_last_error ){
+                throw new PricevaException('');
+            }else{
+                return $result;
+            }
         }
     }
 }
