@@ -47,7 +47,7 @@ class Request
      * @return Result
      * @throws PricevaException
      */
-    public function start( )
+    public function start()
     {
         $ch = curl_init();
 
@@ -57,19 +57,28 @@ class Request
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, []);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             "Apikey: " . $this->params[ 'api_key' ],
         ]);
 
-        $response = json_decode(curl_exec($ch));
-        curl_close($ch);
+        $response = curl_exec($ch);
 
-        $json_last_error = json_last_error();
+        if( $response ){
+            $response = json_decode($response);
+            curl_close($ch);
 
-        if ($json_last_error) {
-            throw new PricevaException('', 500);
-        } else {
-            return new Result($response);
+            $json_last_error = json_last_error();
+
+            if( $json_last_error ){
+                throw new PricevaException('Server answer cannot be decoded. Error code: ' . $json_last_error, 500);
+            }else{
+                return new Result($response);
+            }
+        }else{
+            $curl_error = curl_error($ch);
+            curl_close($ch);
+            throw new PricevaException('cURL error: ' . $curl_error, 500);
         }
     }
 }
