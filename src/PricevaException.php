@@ -33,7 +33,7 @@ class PricevaException extends Exception
      */
     public function __construct( $message = null, $code = 0 )
     {
-        if( isset($this->errors[ $code ]) ){
+        if( isset($this->errors[ $code ]) && empty($message) ){
             $message = $this->errors[ $code ];
         }
 
