@@ -48,6 +48,8 @@ class Result
      */
     public function __construct( $curl_response )
     {
+        $this->curl_response = $curl_response;
+
         if( isset($curl_response->errors_cnt) && $curl_response->errors_cnt > 0 ){
             $this->error = true;
 
