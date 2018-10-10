@@ -47,4 +47,18 @@ class PricevaAPITest extends PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Priceva\Result', $result);
     }
+
+    public function testProduct_list()
+    {
+        $result = $this->PricevaAPI->product_list();
+
+        $this->assertInstanceOf('Priceva\Result', $result);
+    }
+
+    public function testReport_list()
+    {
+        $result = $this->PricevaAPI->report_list();
+
+        $this->assertInstanceOf('Priceva\Result', $result);
+    }
 }
