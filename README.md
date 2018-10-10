@@ -56,7 +56,9 @@ try{
 ## API actions
 
 * main/ping
-* main/demo 
+* main/demo
+* product/list
+* report/list
 
 ## Additional information
 
