@@ -20,6 +20,7 @@ class PricevaAPI
     const ACTION_MAIN_DEMO = 'main/demo';
 
     const ACTION_PRODUCT_LIST = 'product/list';
+    const ACTION_REPORT_LIST  = 'report/list';
 
     /**
      * @var string $api_key
@@ -84,6 +85,21 @@ class PricevaAPI
             'api_key'     => $this->api_key,
             'api_version' => $this->api_version,
             'action'      => self::ACTION_PRODUCT_LIST,
+        ]);
+
+        return $request->start();
+    }
+
+    /**
+     * @return Result;
+     * @throws PricevaException
+     */
+    public function report_list()
+    {
+        $request = new Request([
+            'api_key'     => $this->api_key,
+            'api_version' => $this->api_version,
+            'action'      => self::ACTION_REPORT_LIST,
         ]);
 
         return $request->start();
