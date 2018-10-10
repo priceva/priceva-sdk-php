@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: Stas
+ * S.Belichenko, email: stanislav@priceva.com
  * Date: 08.10.2018
  * Time: 17:57
  */
@@ -21,7 +21,7 @@ class PricevaException extends Exception
     private $errors = [
         '400' => 'Your request caused an error. You can not get the result.',
         '401' => 'Authorization failed.',
-        '418' => 'The response from the server cannot be converted to an array json or other entity.',
+        '418' => 'The response from the server cannot be converted to an array, json or other entity.',
         '500' => 'Internal Server Error',
     ];
 
@@ -33,7 +33,7 @@ class PricevaException extends Exception
      */
     public function __construct( $message = null, $code = 0 )
     {
-        if( isset($this->errors[ $code ]) ){
+        if( isset($this->errors[ $code ]) && empty($message) ){
             $message = $this->errors[ $code ];
         }
 

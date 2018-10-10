@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: Stas
+ * S.Belichenko, email: stanislav@priceva.com
  * Date: 08.10.2018
  * Time: 14:30
  */
@@ -147,7 +147,7 @@ class Result
             $json_last_error = json_last_error();
 
             if( $json_last_error ){
-                throw new PricevaException(null, 500);
+                throw new PricevaException(null, 418);
             }else{
                 return $result;
             }
@@ -167,7 +167,7 @@ class Result
             $json_last_error = json_last_error();
 
             if( $json_last_error ){
-                throw new PricevaException('');
+                throw new PricevaException(null, 418);
             }else{
                 return $result;
             }
