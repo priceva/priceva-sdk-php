@@ -32,6 +32,11 @@ class PricevaAPI
     private $request_method = '';
 
     /**
+     * @var Filter $filter
+     */
+    private $filter;
+
+    /**
      * PricevaAPI constructor.
      *
      * @param        $api_key
@@ -43,6 +48,26 @@ class PricevaAPI
         $this->api_key        = $api_key;
         $this->api_version    = $api_version;
         $this->request_method = $request_method;
+
+        $this->filter = new Filter();
+    }
+
+    /**
+     * @param array|Filter $filter
+     *
+     * @throws PricevaException
+     */
+    public function set_filter( $filter )
+    {
+        $this->filter->merge($filter);
+    }
+
+    /**
+     * @return Filter
+     */
+    public function get_filter()
+    {
+        return $this->filter;
     }
 
     /**
@@ -76,10 +101,12 @@ class PricevaAPI
     }
 
     /**
+     * @param array|Filter $filter
+     *
      * @return Result;
      * @throws PricevaException
      */
-    public function product_list()
+    public function product_list( $filter = [] )
     {
         $request = new Request([
             'api_key'     => $this->api_key,
@@ -87,14 +114,18 @@ class PricevaAPI
             'action'      => self::ACTION_PRODUCT_LIST,
         ]);
 
-        return $request->start();
+        $this->set_filter($filter);
+
+        return $request->start($this->filter);
     }
 
     /**
+     * @param array|Filter $filter
+     *
      * @return Result;
      * @throws PricevaException
      */
-    public function report_list()
+    public function report_list( $filter = [] )
     {
         $request = new Request([
             'api_key'     => $this->api_key,
@@ -102,6 +133,8 @@ class PricevaAPI
             'action'      => self::ACTION_REPORT_LIST,
         ]);
 
-        return $request->start();
+        $this->set_filter($filter);
+
+        return $request->start($this->filter);
     }
 }
