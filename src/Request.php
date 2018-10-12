@@ -44,23 +44,28 @@ class Request
     }
 
     /**
-     * @param Filter $filter
+     * @param Filter $filters
      *
      * @return Result
      * @throws PricevaException
      */
-    public function start( $filter = null )
+    public function start( $filters = null )
     {
         $ch = curl_init();
 
-        $url    = $this->get_url($this->params[ 'action' ]);
-        $filter = $filter === null ? [] : $filter->get_array();
+        $url = $this->get_url($this->params[ 'action' ]);
+
+        $params = [
+            'params' => [
+                'filters' => $filters,
+            ],
+        ];
 
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($filter));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params));
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             "Apikey: " . $this->params[ 'api_key' ],
         ]);

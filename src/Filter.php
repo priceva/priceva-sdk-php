@@ -9,7 +9,7 @@
 namespace Priceva;
 
 
-class Filter extends \ArrayObject
+class Filter extends \ArrayObject implements \JsonSerializable
 {
     private $container = [];
 
@@ -108,5 +108,10 @@ class Filter extends \ArrayObject
     public function offsetGet( $offset )
     {
         return isset($this->container[ $offset ]) ? $this->container[ $offset ] : null;
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->container;
     }
 }
