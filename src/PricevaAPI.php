@@ -32,9 +32,10 @@ class PricevaAPI
     private $request_method = '';
 
     /**
-     * @var Filter $filter
+     * @var Filters $filters
+     * @var         $product_fields
      */
-    private $filter;
+    private $filters;
 
     /**
      * PricevaAPI constructor.
@@ -49,25 +50,25 @@ class PricevaAPI
         $this->api_version    = $api_version;
         $this->request_method = $request_method;
 
-        $this->filter = new Filter();
+        $this->filters = new Filters();
     }
 
     /**
-     * @param array|Filter $filter
+     * @param array|Filters $filters
      *
      * @throws PricevaException
      */
-    public function set_filter( $filter )
+    public function set_filters( $filters )
     {
-        $this->filter->merge($filter);
+        $this->filters->merge($filters);
     }
 
     /**
-     * @return Filter
+     * @return Filters
      */
-    public function get_filter()
+    public function get_filters()
     {
-        return $this->filter;
+        return $this->filters;
     }
 
     /**
@@ -101,12 +102,12 @@ class PricevaAPI
     }
 
     /**
-     * @param array|Filter $filter
+     * @param array|Filters $filters
      *
      * @return Result;
      * @throws PricevaException
      */
-    public function product_list( $filter = [] )
+    public function product_list( $filters = [] )
     {
         $request = new Request([
             'api_key'     => $this->api_key,
@@ -114,18 +115,18 @@ class PricevaAPI
             'action'      => self::ACTION_PRODUCT_LIST,
         ]);
 
-        $this->set_filter($filter);
+        $this->set_filters($filters);
 
-        return $request->start($this->filter);
+        return $request->start($this->filters);
     }
 
     /**
-     * @param array|Filter $filter
+     * @param array|Filters $filters
      *
      * @return Result;
      * @throws PricevaException
      */
-    public function report_list( $filter = [] )
+    public function report_list( $filters = [] )
     {
         $request = new Request([
             'api_key'     => $this->api_key,
@@ -133,8 +134,8 @@ class PricevaAPI
             'action'      => self::ACTION_REPORT_LIST,
         ]);
 
-        $this->set_filter($filter);
+        $this->set_filters($filters);
 
-        return $request->start($this->filter);
+        return $request->start($this->filters);
     }
 }

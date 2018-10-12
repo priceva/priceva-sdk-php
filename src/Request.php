@@ -44,7 +44,7 @@ class Request
     }
 
     /**
-     * @param Filter $filters
+     * @param Filters $filters
      *
      * @return Result
      * @throws PricevaException

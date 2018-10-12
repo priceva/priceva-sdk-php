@@ -9,43 +9,43 @@
 namespace Priceva;
 
 
-class FilterTest extends \PHPUnit_Framework_TestCase
+class FiltersTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Filter $Filter
+     * @var Filters $Filter
      */
-    private $Filter;
+    private $Filters;
 
     protected function setUp()
     {
-        $this->Filter = new Filter();
+        $this->Filters = new Filters();
     }
 
     protected function tearDown()
     {
-        unset($this->Filter);
+        unset($this->Filters);
     }
 
     /**
-     * @return Filter
+     * @return Filters
      */
     public function testOffsetSet()
     {
-        $this->Filter[ 'page' ]        = 1;
-        $this->Filter[ 'limit' ]       = 2;
-        $this->Filter[ 'category_id' ] = 3;
+        $this->Filters[ 'page' ]        = 1;
+        $this->Filters[ 'limit' ]       = 2;
+        $this->Filters[ 'category_id' ] = 3;
 
-        return $this->Filter;
+        return $this->Filters;
     }
 
     /**
      * @depends testOffsetSet
      *
-     * @param Filter $filter
+     * @param Filters $filters
      */
-    public function testGet_array( $filter )
+    public function testGet_array( $filters )
     {
-        $this->AssertEquals($filter->get_array(), [
+        $this->AssertEquals($filters->get_array(), [
             'page'        => 1,
             'limit'       => 2,
             'category_id' => 3,
@@ -55,21 +55,21 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testOffsetSet
      *
-     * @param Filter $filter
+     * @param Filters $filters
      */
-    public function testOffsetGet( $filter )
+    public function testOffsetGet( $filters )
     {
-        echo $filter[ 'page' ];
+        echo $filters[ 'page' ];
     }
 
     /**
      * @depends testOffsetSet
      *
-     * @param Filter $filter
+     * @param Filters $filters
      */
-    public function testOffsetExists( $filter )
+    public function testOffsetExists( $filters )
     {
-        $this->assertTrue($filter->offsetExists('page'));
+        $this->assertTrue($filters->offsetExists('page'));
 
     }
 
@@ -79,27 +79,27 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     public function testOffsetSetThrowException()
     {
-        $this->Filter[ 'wrong_param' ] = 1;
+        $this->Filters[ 'wrong_param' ] = 1;
     }
 
     /**
      * @depends testOffsetSet
      *
-     * @param Filter $filter
+     * @param Filters $filters
      */
-    public function testCount( $filter )
+    public function testCount( $filters )
     {
-        $this->assertEquals(count($filter), 3);
+        $this->assertEquals(count($filters), 3);
     }
 
     /**
      * @depends testOffsetSet
      *
-     * @param Filter $filter
+     * @param Filters $filters
      */
-    public function testOffsetUnset( $filter )
+    public function testOffsetUnset( $filters )
     {
-        unset($filter[ 'page' ]);
-        $this->assertEquals(count($filter), 2);
+        unset($filters[ 'page' ]);
+        $this->assertEquals(count($filters), 2);
     }
 }

@@ -34,12 +34,12 @@ class PricevaAPITest extends \PHPUnit_Framework_TestCase
     /**
      * @throws PricevaException
      */
-    public function testSet_filterObject()
+    public function testSet_filtersObject()
     {
-        $filter_obj           = new Filter();
-        $filter_obj[ 'page' ] = 1;
-        $this->PricevaAPI->set_filter($filter_obj);
-        $this->AssertEquals($this->PricevaAPI->get_filter()->get_array(), [
+        $filters_obj           = new Filters();
+        $filters_obj[ 'page' ] = 1;
+        $this->PricevaAPI->set_filters($filters_obj);
+        $this->AssertEquals($this->PricevaAPI->get_filters()->get_array(), [
             'page' => 1,
         ]);
     }
@@ -47,11 +47,11 @@ class PricevaAPITest extends \PHPUnit_Framework_TestCase
     /**
      * @throws PricevaException
      */
-    public function testSet_filterArray()
+    public function testSet_filtersArray()
     {
-        $filter_arr[ 'page' ] = 1;
-        $this->PricevaAPI->set_filter($filter_arr);
-        $this->AssertEquals($this->PricevaAPI->get_filter()->get_array(), [
+        $filters_arr[ 'page' ] = 1;
+        $this->PricevaAPI->set_filters($filters_arr);
+        $this->AssertEquals($this->PricevaAPI->get_filters()->get_array(), [
             'page' => 1,
         ]);
     }
@@ -59,17 +59,17 @@ class PricevaAPITest extends \PHPUnit_Framework_TestCase
     /**
      * @throws PricevaException
      */
-    public function testSet_filterAgain()
+    public function testSet_filtersAgain()
     {
-        $filter_arr            = [];
-        $filter_arr[ 'limit' ] = 1;
-        $this->PricevaAPI->set_filter($filter_arr);
+        $filters_arr            = [];
+        $filters_arr[ 'limit' ] = 1;
+        $this->PricevaAPI->set_filters($filters_arr);
 
-        $filter_obj           = new Filter();
-        $filter_obj[ 'page' ] = 1;
-        $this->PricevaAPI->set_filter($filter_obj);
+        $filters_obj           = new Filters();
+        $filters_obj[ 'page' ] = 1;
+        $this->PricevaAPI->set_filters($filters_obj);
 
-        $this->AssertEquals($this->PricevaAPI->get_filter()->get_array(), [
+        $this->AssertEquals($this->PricevaAPI->get_filters()->get_array(), [
             'page'  => 1,
             'limit' => 1,
         ]);
@@ -77,13 +77,13 @@ class PricevaAPITest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Priceva\PricevaException
-     * @expectedExceptionMessage Wrong type of the filter.
+     * @expectedExceptionMessage Filters must be an array or an object of type Filters.
      */
-    public function testSet_filterThrowException()
+    public function testSet_filtersThrowException()
     {
-        $filter_arr = 'page';
+        $filters_arr = 'page';
         /** @noinspection PhpParamsInspection */
-        $this->PricevaAPI->set_filter($filter_arr);
+        $this->PricevaAPI->set_filters($filters_arr);
     }
 
     /**
@@ -109,13 +109,13 @@ class PricevaAPITest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider filters
      *
-     * @param $filter
+     * @param $filters
      *
      * @throws PricevaException
      */
-    public function testProduct_list( $filter )
+    public function testProduct_list( $filters )
     {
-        $result = $this->PricevaAPI->product_list($filter);
+        $result = $this->PricevaAPI->product_list($filters);
 
         $this->assertInstanceOf('Priceva\Result', $result);
     }
@@ -123,35 +123,35 @@ class PricevaAPITest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider filters
      *
-     * @param $filter
+     * @param $filters
      *
      * @throws PricevaException
      */
-    public function testReport_list( $filter )
+    public function testReport_list( $filters )
     {
-        $result = $this->PricevaAPI->report_list($filter);
+        $result = $this->PricevaAPI->report_list($filters);
         $this->assertInstanceOf('Priceva\Result', $result);
     }
 
     public function filters()
     {
-        $filter_empty = new Filter();
+        $filters_empty = new Filters();
 
-        $filter_full           = new Filter();
-        $filter_full[ 'page' ] = 1;
+        $filters_full           = new Filters();
+        $filters_full[ 'page' ] = 1;
 
         return [
             [
-                'FILTER' => [],
+                'FILTERS' => [],
             ],
             [
-                'FILTER' => [ 'page' => 1 ],
+                'FILTERS' => [ 'page' => 1 ],
             ],
             [
-                'FILTER' => $filter_empty,
+                'FILTERS' => $filters_empty,
             ],
             [
-                'FILTER' => $filter_full,
+                'FILTERS' => $filters_full,
             ],
         ];
     }

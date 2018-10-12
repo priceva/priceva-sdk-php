@@ -9,7 +9,7 @@
 namespace Priceva;
 
 
-class Filter extends \ArrayObject implements \JsonSerializable
+class Filters extends \ArrayObject implements \JsonSerializable
 {
     private $container = [];
 
@@ -35,7 +35,7 @@ class Filter extends \ArrayObject implements \JsonSerializable
     }
 
     /**
-     * @param array|Filter $array
+     * @param array|Filters $array
      *
      * @throws PricevaException
      */
@@ -43,10 +43,10 @@ class Filter extends \ArrayObject implements \JsonSerializable
     {
         if( is_array($array) ){
             $this->container = array_merge($this->container, $array);
-        }elseif( gettype($array) === 'object' and get_class($array) === 'Priceva\Filter' ){
+        }elseif( gettype($array) === 'object' and get_class($array) === 'Priceva\Filters' ){
             $this->container = array_merge($this->container, $array->get_array());
         }else{
-            throw new PricevaException('Wrong type of the filter.');
+            throw new PricevaException('Filters must be an array or an object of type Filters.');
         }
     }
 
@@ -59,7 +59,7 @@ class Filter extends \ArrayObject implements \JsonSerializable
     public function offsetSet( $offset, $value )
     {
         if( is_null($offset) ){
-            throw new PricevaException('You cannot add a nameless filter parameter.');
+            throw new PricevaException('You cannot add a nameless filters parameter.');
         }else{
             if( in_array($offset, $this->valid_parameters) ){
                 $this->container[ $offset ] = $value;
@@ -71,7 +71,7 @@ class Filter extends \ArrayObject implements \JsonSerializable
 
     public function getIterator()
     {
-        return new FilterIterator($this->container);
+        return new FiltersIterator($this->container);
     }
 
     /**

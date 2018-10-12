@@ -9,7 +9,7 @@
 namespace Priceva;
 
 
-class FilterIterator implements \Iterator
+class FiltersIterator implements \Iterator
 {
     private $container;
 

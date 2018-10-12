@@ -12,27 +12,27 @@ namespace Priceva;
 class FilterIteratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Filter $Filter
+     * @var Filters $Filter
      */
-    private $Filter;
+    private $Filters;
 
     protected function setUp()
     {
-        $this->Filter = new Filter();
+        $this->Filters = new Filters();
 
-        $this->Filter[ 'page' ]        = 1;
-        $this->Filter[ 'limit' ]       = 2;
-        $this->Filter[ 'category_id' ] = 3;
+        $this->Filters[ 'page' ]        = 1;
+        $this->Filters[ 'limit' ]       = 2;
+        $this->Filters[ 'category_id' ] = 3;
     }
 
     protected function tearDown()
     {
-        unset($this->Filter);
+        unset($this->Filters);
     }
 
     public function testRewind()
     {
-        foreach( $this->Filter as $filter ){
+        foreach( $this->Filters as $filter ){
             $first = $filter;
             $this->assertEquals($first, 1);
 
@@ -66,7 +66,7 @@ class FilterIteratorTest extends \PHPUnit_Framework_TestCase
     public function testNext()
     {
         $i = 0;
-        foreach( $this->Filter as $filter ){
+        foreach( $this->Filters as $filter ){
             $i++;
 
             if( $i === 2 ){

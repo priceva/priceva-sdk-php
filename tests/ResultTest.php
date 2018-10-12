@@ -12,7 +12,7 @@ namespace Priceva;
 class ResultTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Result $Filter
+     * @var Result $Result
      */
     private $Result;
 
