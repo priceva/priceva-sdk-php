@@ -37,6 +37,8 @@ and run `composer install`.
     
 ## Use
 
+Simplest example:
+
 ````php
 use Priceva\PricevaAPI;
 
@@ -53,6 +55,54 @@ try{
     // error handler
 }
 ````
+
+Get a list of products:
+
+````php
+try{
+    // or include our files directly, if you don't want to use Composer
+    require_once __DIR__ . "/../vendor/autoload.php";
+
+    $api = new PricevaAPI('your_api_key');
+
+    $filters = new \Priceva\Params\Filters();
+    $sources = new \Priceva\Params\Sources();
+
+    $filters[ 'page' ]      = 1;
+    $filters[ 'region_id' ] = 'a';
+
+    $sources[ 'add' ]      = true;
+    $sources[ 'add_term' ] = true;
+
+    $products = $api->product_list($filters, $sources);
+}catch( \Exception $e ){
+    // error handler
+}
+````
+
+Get a list of reports:
+
+````php
+try{
+    // or include our files directly, if you don't want to use Composer
+    require_once __DIR__ . "/../vendor/autoload.php";
+
+    $api = new PricevaAPI('your_api_key');
+
+    $filters        = new \Priceva\Params\Filters();
+    $product_fields = new \Priceva\Params\ProductFields();
+
+    $filters[ 'page' ]      = 1;
+    $filters[ 'region_id' ] = 'a';
+
+    $product_fields[ 'articul' ] = '37ax';
+
+    $reports = $api->report_list($filters, $product_fields);
+}catch( \Exception $e ){
+    // error handler
+}
+````
+
 ## API actions
 
 * main/ping
@@ -84,7 +134,7 @@ Applicable in methods: `product/list`. Possible options:
 * add
 * add_term
 
-## Additional information
+### Product fields
 
 Applicable in methods: `report/list`. Possible options:
 
@@ -98,5 +148,7 @@ Applicable in methods: `report/list`. Possible options:
 * default_discount
 * repricing_min
 * default_currency
+
+## Additional information
 
 Read more about our API [here](https://priceva.docs.apiary.io/#introduction).
