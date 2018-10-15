@@ -60,6 +60,43 @@ try{
 * product/list
 * report/list
 
+## Request parameters
+
+### Filters
+
+Applicable in methods: `product/list`, `report/list`. Possible options:
+
+* page
+* limit
+* category_id
+* brand_id
+* company_id
+* region_id
+* active
+* name
+* articul
+* client_code
+
+### Sources
+
+Applicable in methods: `product/list`. Possible options:
+
+* add
+* add_term
+
 ## Additional information
+
+Applicable in methods: `report/list`. Possible options:
+
+* client_code
+* articul
+* name
+* active
+* default_price
+* default_available
+* default_discount_type
+* default_discount
+* repricing_min
+* default_currency
 
 Read more about our API [here](https://priceva.docs.apiary.io/#introduction).

@@ -9,6 +9,10 @@
 namespace Priceva;
 
 
+use Priceva\Params\Filters;
+use Priceva\Params\ProductFields;
+use Priceva\Params\Sources;
+
 /**
  * Class Request
  *
@@ -40,24 +44,36 @@ class Request
      */
     private function get_url( $action )
     {
-        return sprintf(self::URL_API_V1, $this->params['api_version']) . $action;
+        return sprintf(self::URL_API_V1, $this->params[ 'api_version' ]) . $action;
     }
 
     /**
+     * @param Filters       $filters
+     * @param Sources       $sources
+     * @param ProductFields $product_fields
+     *
      * @return Result
      * @throws PricevaException
      */
-    public function start()
+    public function start( $filters = null, $sources = null, $product_fields = null )
     {
         $ch = curl_init();
 
         $url = $this->get_url($this->params[ 'action' ]);
 
+        $params = [
+            'params' => [
+                'filters'        => $filters,
+                'sources'        => $sources,
+                'product_fields' => $product_fields,
+            ],
+        ];
+
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, []);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params));
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             "Apikey: " . $this->params[ 'api_key' ],
         ]);

@@ -133,44 +133,4 @@ class Result
             return $this->result;
         }
     }
-
-    /**
-     * @return \stdClass
-     * @throws PricevaException
-     */
-    public function get_std_class()
-    {
-        if( $this->error ){
-            throw new PricevaException(null, 400);
-        }else{
-            $result          = json_decode($this->result, false);
-            $json_last_error = json_last_error();
-
-            if( $json_last_error ){
-                throw new PricevaException(null, 418);
-            }else{
-                return $result;
-            }
-        }
-    }
-
-    /**
-     * @return array
-     * @throws PricevaException
-     */
-    public function get_assoc()
-    {
-        if( $this->error ){
-            throw new PricevaException(null, 400);
-        }else{
-            $result          = json_decode($this->result, true);
-            $json_last_error = json_last_error();
-
-            if( $json_last_error ){
-                throw new PricevaException(null, 418);
-            }else{
-                return $result;
-            }
-        }
-    }
 }
