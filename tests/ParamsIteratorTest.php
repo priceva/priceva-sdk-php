@@ -9,31 +9,33 @@
 namespace Priceva;
 
 
-class FilterIteratorTest extends \PHPUnit_Framework_TestCase
+use Priceva\Params\Filters;
+
+class ParamsIteratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Filters $Filter
      */
-    private $Filters;
+    private $Params;
 
     protected function setUp()
     {
-        $this->Filters = new Filters();
+        $this->Params = new Filters();
 
-        $this->Filters[ 'page' ]        = 1;
-        $this->Filters[ 'limit' ]       = 2;
-        $this->Filters[ 'category_id' ] = 3;
+        $this->Params[ 'page' ]        = 1;
+        $this->Params[ 'limit' ]       = 2;
+        $this->Params[ 'category_id' ] = 3;
     }
 
     protected function tearDown()
     {
-        unset($this->Filters);
+        unset($this->Params);
     }
 
     public function testRewind()
     {
-        foreach( $this->Filters as $filter ){
-            $first = $filter;
+        foreach( $this->Params as $param ){
+            $first = $param;
             $this->assertEquals($first, 1);
 
             return;
@@ -66,11 +68,11 @@ class FilterIteratorTest extends \PHPUnit_Framework_TestCase
     public function testNext()
     {
         $i = 0;
-        foreach( $this->Filters as $filter ){
+        foreach( $this->Params as $param ){
             $i++;
 
             if( $i === 2 ){
-                $second = $filter;
+                $second = $param;
                 $this->assertEquals($second, 2);
 
                 return;

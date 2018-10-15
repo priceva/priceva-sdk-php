@@ -9,6 +9,10 @@
 namespace Priceva;
 
 
+use Priceva\Params\Filters;
+use Priceva\Params\ProductFields;
+use Priceva\Params\Sources;
+
 /**
  * Class Request
  *
@@ -44,12 +48,14 @@ class Request
     }
 
     /**
-     * @param Filters $filters
+     * @param Filters       $filters
+     * @param Sources       $sources
+     * @param ProductFields $product_fields
      *
      * @return Result
      * @throws PricevaException
      */
-    public function start( $filters = null )
+    public function start( $filters = null, $sources = null, $product_fields = null )
     {
         $ch = curl_init();
 
@@ -57,7 +63,9 @@ class Request
 
         $params = [
             'params' => [
-                'filters' => $filters,
+                'filters'        => $filters,
+                'sources'        => $sources,
+                'product_fields' => $product_fields,
             ],
         ];
 

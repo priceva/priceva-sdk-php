@@ -6,14 +6,24 @@
  * Time: 12:37
  */
 
-namespace Priceva;
+namespace Priceva\Contracts;
 
 
-class FiltersIterator implements \Iterator
+/**
+ * Class ParamsIterator
+ *
+ * @package Priceva\Contracts
+ */
+class ParamsIterator implements \Iterator
 {
     private $container;
 
 
+    /**
+     * ParamsIterator constructor.
+     *
+     * @param $container
+     */
     public function __construct( $container )
     {
         $this->container = $container;
@@ -24,6 +34,9 @@ class FiltersIterator implements \Iterator
         reset($this->container);
     }
 
+    /**
+     * @return mixed
+     */
     public function current()
     {
         $var = current($this->container);
@@ -31,6 +44,9 @@ class FiltersIterator implements \Iterator
         return $var;
     }
 
+    /**
+     * @return bool
+     */
     public function valid()
     {
         $key = key($this->container);
@@ -39,6 +55,9 @@ class FiltersIterator implements \Iterator
         return $var;
     }
 
+    /**
+     * @return int|mixed|null|string
+     */
     public function key()
     {
         $var = key($this->container);
@@ -46,6 +65,9 @@ class FiltersIterator implements \Iterator
         return $var;
     }
 
+    /**
+     * @return mixed
+     */
     public function next()
     {
         $var = next($this->container);

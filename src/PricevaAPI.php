@@ -9,6 +9,10 @@
 namespace Priceva;
 
 
+use Priceva\Params\Filters;
+use Priceva\Params\ProductFields;
+use Priceva\Params\Sources;
+
 /**
  * Class PricevaAPI
  *
@@ -33,9 +37,16 @@ class PricevaAPI
 
     /**
      * @var Filters $filters
-     * @var         $product_fields
      */
     private $filters;
+    /**
+     * @var ProductFields $product_fields
+     */
+    private $product_fields;
+    /**
+     * @var Sources $sources
+     */
+    private $sources;
 
     /**
      * PricevaAPI constructor.
@@ -50,7 +61,9 @@ class PricevaAPI
         $this->api_version    = $api_version;
         $this->request_method = $request_method;
 
-        $this->filters = new Filters();
+        $this->filters        = new Filters();
+        $this->sources        = new Sources();
+        $this->product_fields = new ProductFields();
     }
 
     /**
@@ -64,11 +77,48 @@ class PricevaAPI
     }
 
     /**
+     * @param array|Sources $sources
+     *
+     * @throws PricevaException
+     */
+    public function set_sources( $sources )
+    {
+        $this->sources->merge($sources);
+    }
+
+    /**
+     * @param array|ProductFields $product_fields
+     *
+     * @throws PricevaException
+     */
+    public function set_product_fields( $product_fields )
+    {
+        $this->product_fields->merge($product_fields);
+    }
+
+    /**
      * @return Filters
      */
     public function get_filters()
     {
         return $this->filters;
+    }
+
+    /**
+     * @return Sources
+     */
+    public function get_sources()
+    {
+        return $this->sources;
+    }
+
+
+    /**
+     * @return ProductFields
+     */
+    public function get_product_fields()
+    {
+        return $this->product_fields;
     }
 
     /**
@@ -103,11 +153,12 @@ class PricevaAPI
 
     /**
      * @param array|Filters $filters
+     * @param array|Sources $sources
      *
      * @return Result;
      * @throws PricevaException
      */
-    public function product_list( $filters = [] )
+    public function product_list( $filters = [], $sources = [] )
     {
         $request = new Request([
             'api_key'     => $this->api_key,
@@ -116,17 +167,19 @@ class PricevaAPI
         ]);
 
         $this->set_filters($filters);
+        $this->set_sources($sources);
 
-        return $request->start($this->filters);
+        return $request->start($this->filters, $this->sources);
     }
 
     /**
-     * @param array|Filters $filters
+     * @param array|Filters       $filters
+     * @param array|ProductFields $product_fields
      *
      * @return Result;
      * @throws PricevaException
      */
-    public function report_list( $filters = [] )
+    public function report_list( $filters = [], $product_fields = [] )
     {
         $request = new Request([
             'api_key'     => $this->api_key,
@@ -135,7 +188,8 @@ class PricevaAPI
         ]);
 
         $this->set_filters($filters);
+        $this->set_product_fields($product_fields);
 
-        return $request->start($this->filters);
+        return $request->start($this->filters, $this->product_fields);
     }
 }

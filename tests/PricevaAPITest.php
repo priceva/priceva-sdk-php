@@ -9,6 +9,10 @@
 namespace Priceva;
 
 
+use Priceva\Params\Filters;
+use Priceva\Params\ProductFields;
+use Priceva\Params\Sources;
+
 class PricevaAPITest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -24,6 +28,40 @@ class PricevaAPITest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         unset($this->PricevaAPI);
+    }
+
+    /**
+     * @return array
+     */
+    public function filters()
+    {
+        $filters_empty        = new Filters();
+        $product_fields_empty = new ProductFields();
+
+        $filters_fully           = new Filters();
+        $filters_fully[ 'page' ] = 1;
+
+        $product_fields_fully                  = new ProductFields();
+        $product_fields_empty[ 'client_code' ] = 1;
+
+        return [
+            [
+                'FILTERS'        => [],
+                'PRODUCT_FIELDS' => [],
+            ],
+            [
+                'FILTERS'        => [ 'page' => 1 ],
+                'PRODUCT_FIELDS' => [ 'client_code' => 1 ],
+            ],
+            [
+                'FILTERS'        => $filters_empty,
+                'PRODUCT_FIELDS' => $product_fields_empty,
+            ],
+            [
+                'FILTERS'        => $filters_fully,
+                'PRODUCT_FIELDS' => $product_fields_fully,
+            ],
+        ];
     }
 
     public function test__construct()
@@ -76,14 +114,85 @@ class PricevaAPITest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @throws PricevaException
+     */
+    public function testSet_sourcesObject()
+    {
+        $sources_obj          = new Sources();
+        $sources_obj[ 'add' ] = 1;
+
+        $this->PricevaAPI->set_sources($sources_obj);
+        $this->AssertEquals($this->PricevaAPI->get_sources()->get_array(), [
+            'add' => 1,
+        ]);
+    }
+
+    /**
+     * @throws PricevaException
+     */
+    public function testSet_sourcesArray()
+    {
+        $sources_arr[ 'add' ] = 1;
+
+        $this->PricevaAPI->set_sources($sources_arr);
+        $this->AssertEquals($this->PricevaAPI->get_sources()->get_array(), [
+            'add' => 1,
+        ]);
+    }
+
+    /**
+     * @throws PricevaException
+     */
+    public function testSet_sourcesAgain()
+    {
+        $sources_arr          = [];
+        $sources_arr[ 'add' ] = 1;
+        $this->PricevaAPI->set_sources($sources_arr);
+
+        $sources_obj               = new Sources();
+        $sources_obj[ 'add_term' ] = 1;
+        $this->PricevaAPI->set_sources($sources_obj);
+
+        $this->AssertEquals($this->PricevaAPI->get_sources()->get_array(), [
+            'add'      => 1,
+            'add_term' => 1,
+        ]);
+    }
+
+    /**
      * @expectedException \Priceva\PricevaException
-     * @expectedExceptionMessage Filters must be an array or an object of type Filters.
+     * @expectedExceptionMessage Params must be an array or an an object extending from the class
+     *                           Priceva\Contracts\Params.
      */
     public function testSet_filtersThrowException()
     {
         $filters_arr = 'page';
         /** @noinspection PhpParamsInspection */
         $this->PricevaAPI->set_filters($filters_arr);
+    }
+
+    /**
+     * @expectedException \Priceva\PricevaException
+     * @expectedExceptionMessage Params must be an array or an an object extending from the class
+     *                           Priceva\Contracts\Params.
+     */
+    public function testSet_sourcesThrowException()
+    {
+        $sources_arr = 'wrong_param';
+        /** @noinspection PhpParamsInspection */
+        $this->PricevaAPI->set_sources($sources_arr);
+    }
+
+    /**
+     * @expectedException \Priceva\PricevaException
+     * @expectedExceptionMessage Params must be an array or an an object extending from the class
+     *                           Priceva\Contracts\Params.
+     */
+    public function testSet_productFieldsThrowException()
+    {
+        $product_fields_arr = 'wrong_param';
+        /** @noinspection PhpParamsInspection */
+        $this->PricevaAPI->set_sources($product_fields_arr);
     }
 
     /**
@@ -110,12 +219,13 @@ class PricevaAPITest extends \PHPUnit_Framework_TestCase
      * @dataProvider filters
      *
      * @param $filters
+     * @param $product_fields
      *
      * @throws PricevaException
      */
-    public function testProduct_list( $filters )
+    public function testProduct_list( $filters, $product_fields )
     {
-        $result = $this->PricevaAPI->product_list($filters);
+        $result = $this->PricevaAPI->product_list($filters, $product_fields);
 
         $this->assertInstanceOf('Priceva\Result', $result);
     }
@@ -131,28 +241,5 @@ class PricevaAPITest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->PricevaAPI->report_list($filters);
         $this->assertInstanceOf('Priceva\Result', $result);
-    }
-
-    public function filters()
-    {
-        $filters_empty = new Filters();
-
-        $filters_full           = new Filters();
-        $filters_full[ 'page' ] = 1;
-
-        return [
-            [
-                'FILTERS' => [],
-            ],
-            [
-                'FILTERS' => [ 'page' => 1 ],
-            ],
-            [
-                'FILTERS' => $filters_empty,
-            ],
-            [
-                'FILTERS' => $filters_full,
-            ],
-        ];
     }
 }

@@ -2,29 +2,24 @@
 /**
  * Created by PhpStorm.
  * User: S.Belichenko, email: stanislav@priceva.com
- * Date: 10.10.2018
- * Time: 10:24
+ * Date: 12.10.2018
+ * Time: 12:03
  */
 
-namespace Priceva;
+namespace Priceva\Contracts;
 
 
-class Filters extends \ArrayObject implements \JsonSerializable
+use Priceva\PricevaException;
+
+/**
+ * Class Params
+ *
+ * @package Priceva\Contracts
+ */
+abstract class Params extends \ArrayObject implements ParamsInterface, \JsonSerializable
 {
-    private $container = [];
-
-    private $valid_parameters = [
-        'page',
-        'limit',
-        'category_id',
-        'brand_id',
-        'company_id',
-        'region_id',
-        'active',
-        'name',
-        'articul',
-        'client_code',
-    ];
+    protected $container = [];
+    protected $valid_parameters;
 
     /**
      * @return array
@@ -35,18 +30,18 @@ class Filters extends \ArrayObject implements \JsonSerializable
     }
 
     /**
-     * @param array|Filters $array
+     * @param array|Params $params
      *
      * @throws PricevaException
      */
-    public function merge( $array )
+    public function merge( $params )
     {
-        if( is_array($array) ){
-            $this->container = array_merge($this->container, $array);
-        }elseif( gettype($array) === 'object' and get_class($array) === 'Priceva\Filters' ){
-            $this->container = array_merge($this->container, $array->get_array());
+        if( is_array($params) ){
+            $this->container = array_merge($this->container, $params);
+        }elseif( gettype($params) === 'object' and is_a($params, 'Priceva\Contracts\Params') ){
+            $this->container = array_merge($this->container, $params->get_array());
         }else{
-            throw new PricevaException('Filters must be an array or an object of type Filters.');
+            throw new PricevaException('Params must be an array or an an object extending from the class Priceva\Contracts\Params.');
         }
     }
 
@@ -69,9 +64,12 @@ class Filters extends \ArrayObject implements \JsonSerializable
         }
     }
 
+    /**
+     * @return ParamsIterator
+     */
     public function getIterator()
     {
-        return new FiltersIterator($this->container);
+        return new ParamsIterator($this->container);
     }
 
     /**
@@ -110,6 +108,9 @@ class Filters extends \ArrayObject implements \JsonSerializable
         return isset($this->container[ $offset ]) ? $this->container[ $offset ] : null;
     }
 
+    /**
+     * @return array
+     */
     public function jsonSerialize()
     {
         return $this->container;
