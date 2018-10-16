@@ -12,6 +12,7 @@ namespace Priceva;
 use Priceva\Contracts\Params;
 use Priceva\Params\Filters;
 use Priceva\Params\ProductFields;
+use Priceva\Params\Sources;
 
 class ParamsTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,6 +20,7 @@ class ParamsTest extends \PHPUnit_Framework_TestCase
     public function emptyParams()
     {
         $filters        = new Filters();
+        $sources        = new Sources();
         $product_fields = new ProductFields();
 
         return [
@@ -27,15 +29,20 @@ class ParamsTest extends \PHPUnit_Framework_TestCase
                 'VALUES' => [
                     'page'        => 1,
                     'limit'       => 2,
-                    'category_id' => 3,
+                ],
+            ],
+            [
+                $sources,
+                'VALUES' => [
+                    'add'      => true,
+                    'add_term' => true,
                 ],
             ],
             [
                 $product_fields,
                 'VALUES' => [
-                    'client_code' => 1,
-                    'articul'     => 2,
-                    'name'        => 3,
+                    'client_code',
+                    'articul',
                 ],
             ],
         ];
@@ -44,15 +51,17 @@ class ParamsTest extends \PHPUnit_Framework_TestCase
     public function fullyParams()
     {
         $filters        = new Filters();
+        $sources        = new Sources();
         $product_fields = new ProductFields();
 
         $filters[ 'page' ]        = 1;
         $filters[ 'limit' ]       = 2;
-        $filters[ 'category_id' ] = 3;
 
-        $product_fields[ 'client_code' ] = 1;
-        $product_fields[ 'articul' ]     = 2;
-        $product_fields[ 'name' ]        = 3;
+        $sources [ 'add' ]      = true;
+        $sources [ 'add_term' ] = true;
+
+        $product_fields[] = 'client_code';
+        $product_fields[] = 'articul';
 
         return [
             [
@@ -60,18 +69,39 @@ class ParamsTest extends \PHPUnit_Framework_TestCase
                 'VALUES' => [
                     'page'        => 1,
                     'limit'       => 2,
-                    'category_id' => 3,
+                ],
+            ],
+            [
+                $sources,
+                'VALUES' => [
+                    'add'      => true,
+                    'add_term' => true,
                 ],
             ],
             [
                 $product_fields,
                 'VALUES' => [
-                    'client_code' => 1,
-                    'articul'     => 2,
-                    'name'        => 3,
+                    'client_code',
+                    'articul',
                 ],
             ],
         ];
+    }
+
+    /**
+     * @param Params $instance
+     * @param string $property
+     *
+     * @return mixed
+     * @throws \ReflectionException
+     */
+    private function _getInnerPropertyValueByReflection( $instance, $property = 'flat' )
+    {
+        $reflector          = new \ReflectionClass($instance);
+        $reflector_property = $reflector->getProperty($property);
+        $reflector_property->setAccessible(true);
+
+        return $reflector_property->getValue($instance);
     }
 
     /**
@@ -81,11 +111,20 @@ class ParamsTest extends \PHPUnit_Framework_TestCase
      * @param array  $values
      *
      * @return Params
+     * @throws \ReflectionException
      */
     public function testOffsetSet( $params, $values )
     {
-        foreach( $values as $key => $value ){
-            $params[ $key ] = $value;
+        $flat = $this->_getInnerPropertyValueByReflection($params);
+
+        if( !$flat ){
+            foreach( $values as $key => $value ){
+                $params[ $key ] = $value;
+            }
+        }else{
+            foreach( $values as $value ){
+                $params[] = $value;
+            }
         }
 
         return $params;
@@ -107,10 +146,16 @@ class ParamsTest extends \PHPUnit_Framework_TestCase
      *
      * @param Params $params
      * @param array  $values
+     *
+     * @throws \ReflectionException
      */
     public function testOffsetGet( $params, $values )
     {
-        $params[ key($values) ] = 'test';
+        $flat = $this->_getInnerPropertyValueByReflection($params);
+
+        if( !$flat ){
+            $params[ key($values) ] = 'test';
+        }
     }
 
     /**
@@ -118,10 +163,16 @@ class ParamsTest extends \PHPUnit_Framework_TestCase
      *
      * @param Params $params
      * @param array  $values
+     *
+     * @throws \ReflectionException
      */
     public function testOffsetExists( $params, $values )
     {
-        $this->assertTrue($params->offsetExists(key($values)));
+        $flat = $this->_getInnerPropertyValueByReflection($params);
+
+        if( !$flat ){
+            $this->assertTrue($params->offsetExists(key($values)));
+        }
 
     }
 
@@ -129,13 +180,21 @@ class ParamsTest extends \PHPUnit_Framework_TestCase
      * @dataProvider             fullyParams
      *
      * @expectedException \Priceva\PricevaException
-     * @expectedExceptionMessage You can use only valid parameter names.
+     * @expectedExceptionMessageRegExp /(You can use only valid parameter names)|(You can use only valid options in flat parameter)/u
      *
      * @param Params $params
+     *
+     * @throws \ReflectionException
      */
     public function testOffsetSetThrowException( $params )
     {
-        $params[ 'wrong_param' ] = 1;
+        $flat = $this->_getInnerPropertyValueByReflection($params);
+
+        if( !$flat ){
+            $params[ 'wrong_param' ] = 1;
+        }else{
+            $params[] = 1;
+        }
     }
 
     /**
@@ -145,7 +204,7 @@ class ParamsTest extends \PHPUnit_Framework_TestCase
      */
     public function testCount( $params )
     {
-        $this->assertEquals(count($params), 3);
+        $this->assertEquals(count($params), 2);
     }
 
     /**
@@ -153,10 +212,16 @@ class ParamsTest extends \PHPUnit_Framework_TestCase
      *
      * @param Params $params
      * @param array  $values
+     *
+     * @throws \ReflectionException
      */
     public function testOffsetUnset( $params, $values )
     {
-        unset($params[ key($values) ]);
-        $this->assertEquals(count($params), 2);
+        $flat = $this->_getInnerPropertyValueByReflection($params);
+
+        if( !$flat ){
+            unset($params[ key($values) ]);
+            $this->assertEquals(count($params), 1);
+        }
     }
 }

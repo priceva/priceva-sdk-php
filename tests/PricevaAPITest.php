@@ -33,7 +33,41 @@ class PricevaAPITest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function filters()
+    public function data_products()
+    {
+        $filters_empty = new Filters();
+        $sources_empty = new Sources();
+
+        $filters_fully           = new Filters();
+        $filters_fully[ 'page' ] = 1;
+
+        $sources_fully          = new Sources();
+        $sources_fully[ 'add' ] = true;
+
+        return [
+            [
+                'FILTERS' => [],
+                'SOURCES' => [],
+            ],
+            [
+                'FILTERS' => [ 'page' => 1 ],
+                'SOURCES' => [ 'client_code' => 1 ],
+            ],
+            [
+                'FILTERS' => $filters_empty,
+                'SOURCES' => $sources_empty,
+            ],
+            [
+                'FILTERS' => $filters_fully,
+                'SOURCES' => $sources_fully,
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function data_reports()
     {
         $filters_empty        = new Filters();
         $product_fields_empty = new ProductFields();
@@ -41,8 +75,8 @@ class PricevaAPITest extends \PHPUnit_Framework_TestCase
         $filters_fully           = new Filters();
         $filters_fully[ 'page' ] = 1;
 
-        $product_fields_fully                  = new ProductFields();
-        $product_fields_empty[ 'client_code' ] = 1;
+        $product_fields_fully   = new ProductFields();
+        $product_fields_fully[] = 'client_code';
 
         return [
             [
@@ -216,30 +250,31 @@ class PricevaAPITest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider filters
+     * @dataProvider data_products
      *
-     * @param $filters
-     * @param $product_fields
+     * @param Filters $filters
+     * @param Sources $sources
      *
      * @throws PricevaException
      */
-    public function testProduct_list( $filters, $product_fields )
+    public function testProduct_list( $filters, $sources )
     {
-        $result = $this->PricevaAPI->product_list($filters, $product_fields);
+        $result = $this->PricevaAPI->product_list($filters, $sources);
 
         $this->assertInstanceOf('Priceva\Result', $result);
     }
 
     /**
-     * @dataProvider filters
+     * @dataProvider data_reports
      *
-     * @param $filters
+     * @param Filters       $filters
+     * @param ProductFields $product_fields
      *
      * @throws PricevaException
      */
-    public function testReport_list( $filters )
+    public function testReport_list( $filters, $product_fields )
     {
-        $result = $this->PricevaAPI->report_list($filters);
+        $result = $this->PricevaAPI->report_list($filters, $product_fields);
         $this->assertInstanceOf('Priceva\Result', $result);
     }
 }

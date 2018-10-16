@@ -18,6 +18,7 @@ use Priceva\Contracts\Params;
  */
 class Sources extends Params
 {
+    protected $flat             = false;
     protected $valid_parameters = [
         'add',
         'add_term',
