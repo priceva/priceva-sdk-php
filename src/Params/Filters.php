@@ -18,6 +18,7 @@ use Priceva\Contracts\Params;
  */
 class Filters extends Params
 {
+    protected $flat             = false;
     protected $valid_parameters = [
         'page',
         'limit',
