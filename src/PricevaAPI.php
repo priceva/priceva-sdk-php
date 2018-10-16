@@ -128,8 +128,8 @@ class PricevaAPI
     public function main_ping()
     {
         $request = new Request([
-            'api_key'     => $this->api_key,
-            'api_version' => $this->api_version,
+            'key'     => $this->api_key,
+            'version' => $this->api_version,
             'action'      => self::ACTION_MAIN_PING,
         ]);
 
@@ -143,8 +143,8 @@ class PricevaAPI
     public function main_demo()
     {
         $request = new Request([
-            'api_key'     => $this->api_key,
-            'api_version' => $this->api_version,
+            'key'     => $this->api_key,
+            'version' => $this->api_version,
             'action'      => self::ACTION_MAIN_DEMO,
         ]);
 
@@ -161,15 +161,23 @@ class PricevaAPI
     public function product_list( $filters = [], $sources = [] )
     {
         $request = new Request([
-            'api_key'     => $this->api_key,
-            'api_version' => $this->api_version,
+            'key'     => $this->api_key,
+            'version' => $this->api_version,
             'action'      => self::ACTION_PRODUCT_LIST,
         ]);
 
         $this->set_filters($filters);
         $this->set_sources($sources);
 
-        return $request->start($this->filters, $this->sources);
+        $request_params = [
+            'params' => [
+                'filters' => $filters,
+                'sources' => $sources,
+            ],
+        ];
+
+
+        return $request->start($request_params);
     }
 
     /**
@@ -182,14 +190,21 @@ class PricevaAPI
     public function report_list( $filters = [], $product_fields = [] )
     {
         $request = new Request([
-            'api_key'     => $this->api_key,
-            'api_version' => $this->api_version,
+            'key'     => $this->api_key,
+            'version' => $this->api_version,
             'action'      => self::ACTION_REPORT_LIST,
         ]);
 
         $this->set_filters($filters);
         $this->set_product_fields($product_fields);
 
-        return $request->start($this->filters, $this->product_fields);
+        $request_params = [
+            'params' => [
+                'filters'        => $filters,
+                'product_fields' => $product_fields,
+            ],
+        ];
+
+        return $request->start($request_params);
     }
 }
