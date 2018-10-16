@@ -94,8 +94,10 @@ try{
 
     $filters[ 'page' ]      = 1;
     $filters[ 'region_id' ] = 'a';
-
-    $product_fields[ 'articul' ] = '37ax';
+    
+    // we use 'flat model' of parameters here
+    $product_fields[] = 'client_code';
+    $product_fields[] = 'articul';
 
     $reports = $api->report_list($filters, $product_fields);
 }catch( \Exception $e ){
