@@ -63,28 +63,6 @@ class ResultTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @expectedException \Priceva\PricevaException
-     * @expectedExceptionMessage Your request caused an error. You can not get the result.
-     *
-     * @throws PricevaException
-     */
-    public function testGet_assoc()
-    {
-        $this->Result->get_assoc();
-    }
-
-    /**
-     * @expectedException \Priceva\PricevaException
-     * @expectedExceptionMessage Your request caused an error. You can not get the result.
-     *
-     * @throws PricevaException
-     */
-    public function testGet_std_class()
-    {
-        $this->Result->get_std_class();
-    }
-
     public function testError()
     {
         $answer = $this->Result->error();
