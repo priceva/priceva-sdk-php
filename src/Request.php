@@ -9,10 +9,6 @@
 namespace Priceva;
 
 
-use Priceva\Params\Filters;
-use Priceva\Params\ProductFields;
-use Priceva\Params\Sources;
-
 /**
  * Class Request
  *
@@ -25,16 +21,16 @@ class Request
     const METHOD_POST = 'POST';
     const METHOD_GET  = 'GET';
 
-    private $params = [];
+    private $api_params = [];
 
     /**
      * Request constructor.
      *
-     * @param $params
+     * @param $api_params
      */
-    public function __construct( $params )
+    public function __construct( $api_params )
     {
-        $this->params = $params;
+        $this->api_params = $api_params;
     }
 
     /**
@@ -44,38 +40,29 @@ class Request
      */
     private function get_url( $action )
     {
-        return sprintf(self::URL_API_V1, $this->params[ 'api_version' ]) . $action;
+        return sprintf(self::URL_API_V1, $this->api_params[ 'version' ]) . $action;
     }
 
     /**
-     * @param Filters       $filters
-     * @param Sources       $sources
-     * @param ProductFields $product_fields
+     *
+     * @param array $request_params
      *
      * @return Result
      * @throws PricevaException
      */
-    public function start( $filters = null, $sources = null, $product_fields = null )
+    public function start( $request_params = [] )
     {
         $ch = curl_init();
 
-        $url = $this->get_url($this->params[ 'action' ]);
-
-        $params = [
-            'params' => [
-                'filters'        => $filters,
-                'sources'        => $sources,
-                'product_fields' => $product_fields,
-            ],
-        ];
+        $url = $this->get_url($this->api_params[ 'action' ]);
 
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($request_params));
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            "Apikey: " . $this->params[ 'api_key' ],
+            "Apikey: " . $this->api_params[ 'key' ],
         ]);
 
         $response = curl_exec($ch);

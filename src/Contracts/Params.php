@@ -20,6 +20,7 @@ abstract class Params extends \ArrayObject implements ParamsInterface, \JsonSeri
 {
     protected $container = [];
     protected $valid_parameters;
+    protected $flat;
 
     /**
      * @return array
@@ -53,15 +54,30 @@ abstract class Params extends \ArrayObject implements ParamsInterface, \JsonSeri
      */
     public function offsetSet( $offset, $value )
     {
-        if( is_null($offset) ){
-            throw new PricevaException('You cannot add a nameless filters parameter.');
-        }else{
-            if( in_array($offset, $this->valid_parameters) ){
-                $this->container[ $offset ] = $value;
+        if( $this->flat ){
+            if( $offset ){
+                throw new PricevaException('You cannot add a named option in flat parameter.');
+            }elseif( is_null($value) ){
+                throw new PricevaException('You cannot add a empty option in flat parameter.');
             }else{
-                throw new PricevaException('You can use only valid parameter names.');
+                if( in_array($value, $this->valid_parameters) ){
+                    $this->container[] = $value;
+                }else{
+                    throw new PricevaException('You can use only valid options in flat parameter.');
+                }
+            }
+        }else{
+            if( is_null($offset) ){
+                throw new PricevaException('You cannot add a nameless filters parameter.');
+            }else{
+                if( in_array($offset, $this->valid_parameters) ){
+                    $this->container[ $offset ] = $value;
+                }else{
+                    throw new PricevaException('You can use only valid parameter names.');
+                }
             }
         }
+
     }
 
     /**
