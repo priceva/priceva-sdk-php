@@ -16,7 +16,7 @@ SDK for Priceva API (PHP)
 
 Go to the project root directory and run:
 ````bash
-$ php composer require priceva/priceva-sdk-php
+php composer require priceva/priceva-sdk-php
 ````
 or add this string in `require` section of your `composer.json`:
 ````
