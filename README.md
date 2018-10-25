@@ -33,6 +33,7 @@ and run `composer install`.
     include_once '/path/to/lib/PricevaException.php';
     include_once '/path/to/lib/Request.php';
     include_once '/path/to/lib/Result.php';
+    // ...and other our files if it needed
     ````
     
 ## Use
