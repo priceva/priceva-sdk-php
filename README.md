@@ -106,6 +106,43 @@ try{
 }
 ````
 
+Work with pagination:
+
+````php
+$api = new PricevaAPI($api_key);
+
+$filters        = new \Priceva\Params\Filters();
+$product_fields = new \Priceva\Params\ProductFields();
+
+$filters[ 'limit' ] = '1000'; // for example
+$filters[ 'page' ]  = 1; // strong
+
+... // some filters
+
+$product_fields[] = 'client_code'; // if we need it field in answer
+$product_fields[] = 'articul';  // if we need it field in answer
+
+... // some product fields
+
+$reports = $api->report_list($filters, $product_fields);
+
+$pages_cnt = (int)$reports->get_result()->pagination->pages_cnt;
+
+$priceva_products = $reports->get_result()->objects;
+
+process_products($priceva_products); // client function for product processing
+
+while( $pages_cnt > 1 ){
+  $filters[ 'page' ] = $pages_cnt--;
+
+  $reports = $api->report_list($filters, $product_fields);
+
+  $priceva_products = $reports->get_result()->objects;
+
+  process_products($priceva_products); // client function for product processing
+}
+````
+
 ## API actions
 
 * main/ping
