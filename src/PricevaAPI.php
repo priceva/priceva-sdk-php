@@ -25,6 +25,7 @@ class PricevaAPI
 
     const ACTION_PRODUCT_LIST = 'product/list';
     const ACTION_REPORT_LIST  = 'report/list';
+    const ACTION_CATEGORY_LIST = 'category/list';
 
     /**
      * @var string $api_key
@@ -202,6 +203,31 @@ class PricevaAPI
             'params' => [
                 'filters'        => $filters,
                 'product_fields' => $product_fields,
+            ],
+        ];
+
+        return $request->start($request_params);
+    }
+
+    /**
+     * @param array|Filters $filters
+     *
+     * @return Result
+     * @throws PricevaException
+     */
+    public function category_list ( $filters = [])
+    {
+        $request = new Request([
+                                   'key'     => $this->api_key,
+                                   'version' => $this->api_version,
+                                   'action'  => self::ACTION_CATEGORY_LIST,
+                               ]);
+
+        $this->set_filters($filters);
+
+        $request_params = [
+            'params' => [
+                'filters' => $filters,
             ],
         ];
 
