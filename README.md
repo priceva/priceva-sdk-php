@@ -1,3 +1,7 @@
+# DEPRECATED
+
+The new version available at https://github.com/priceva/priceva-api-sdk-php
+
 # Priceva SDK
 
 SDK for Priceva API (PHP)
@@ -35,7 +39,7 @@ and run `composer install`.
     include_once '/path/to/lib/Result.php';
     // ...and other our files if it needed
     ````
-    
+
 ## Use
 
 Simplest example:
@@ -95,7 +99,7 @@ try{
 
     $filters[ 'page' ]      = 1;
     $filters[ 'region_id' ] = 'a';
-    
+
     // we use 'flat model' of parameters here
     $product_fields[] = 'client_code';
     $product_fields[] = 'articul';
